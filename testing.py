@@ -3,7 +3,7 @@ import subprocess
 import tempfile
 
 
-def main():
+def main_credential_store():
     path = os.path.join(tempfile.gettempdir(), "dulwich-git-credential-store-test")
 
     for shell in [True, False]:
@@ -48,6 +48,21 @@ def main():
             print(f"Failed to run: {exc}")
             print(f"{exc.stdout=}")
             print(f"{exc.stderr=}")
+
+
+def main():
+    shell = True
+
+    cmd = "!f() { echo test; } f"
+    try:
+        p = subprocess.run(cmd, shell=shell, capture_output=True, check=True)
+        print(f"{p}")
+        print(f"{p.stdout=}")
+        print(f"{p.stderr=}")
+    except subprocess.CalledProcessError as exc:
+        print(f"Failed to run: {exc}")
+        print(f"{exc.stdout=}")
+        print(f"{exc.stderr=}")
 
 
 if __name__ == "__main__":
