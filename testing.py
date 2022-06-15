@@ -50,7 +50,7 @@ def main_credential_store():
             print(f"{exc.stderr=}")
 
 
-def main():
+def main_subprocess_run():
     shell = True
 
     cmd = "!f() { echo test; } f"
@@ -63,6 +63,15 @@ def main():
         print(f"Failed to run: {exc}")
         print(f"{exc.stdout=}")
         print(f"{exc.stderr=}")
+
+
+def main():
+    import locale
+    import sys
+
+    print(f"{sys.getdefaultencoding()=}")
+    print(f"{sys.getfilesystemencoding()=}")
+    print(f"{locale.getpreferredencoding(False)=}")
 
 
 if __name__ == "__main__":
