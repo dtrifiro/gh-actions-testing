@@ -53,7 +53,7 @@ def main_credential_store():
 def main_subprocess_run():
     shell = True
 
-    cmd = "!f() { echo test; } f"
+    cmd = "f() { echo test; }; f"
     try:
         p = subprocess.run(cmd, shell=shell, capture_output=True, check=True)
         print(f"{p}")
@@ -72,6 +72,23 @@ def main():
     print(f"{sys.getdefaultencoding()=}")
     print(f"{sys.getfilesystemencoding()=}")
     print(f"{locale.getpreferredencoding(False)=}")
+    print(f"{os.linesep=}")
+    try:
+        p = subprocess.run(
+            ["python", "--version"],
+            capture_output=True,
+            check=True,
+        )
+        print(f"{p}")
+        print(f"{p.stdout=}")
+        print(f"{p.stderr=}")
+
+    except subprocess.CalledProcessError as exc:
+        print(f"Failed to run: {exc}")
+        print(f"{exc.stdout=}")
+        print(f"{exc.stderr=}")
+
+    print(p.stdout.split(b"\n"))
 
 
 if __name__ == "__main__":
