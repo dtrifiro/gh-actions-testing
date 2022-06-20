@@ -116,7 +116,7 @@ def main_paths():
     print(f"{split_nonposix=}")
 
 
-def main():
+def main_shlex():
 
     python = shutil.which("python")
     command = f'{python} cli.py --foo bar --quz "with extra args"'
@@ -139,6 +139,23 @@ def main():
             print(f"{exc.stdout=}")
             print(f"{exc.stderr=}")
         print("-" * 30)
+
+
+def main():
+    print("path=", os.environ["PATH"])
+    git_credential_store = shutil.which("git-credential-store")
+    print(f"{git_credential_store=}")
+
+    exec_path = subprocess.check_output(
+        "git --exec-path".split(), universal_newlines=True
+    ).strip()
+
+    p = subprocess.run(
+        os.path.join(exec_path, "git-credential-store"), universal_newlines=True, capture_output=True
+    )
+    print(f"{p}")
+    print(f"{p.stdout=}")
+    print(f"{p.stderr=}")
 
 
 if __name__ == "__main__":
