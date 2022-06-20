@@ -93,7 +93,7 @@ def main_encoding():
     print(p.stdout.split(b"\n"))
 
 
-def main():
+def main_paths():
     path = os.path.join(os.sep, "path", "to", "executable")
     print(f"{path=}")
     print(f"{os.path.isabs(path)=}")
@@ -113,6 +113,29 @@ def main():
     print(f"{split=}")
     split_nonposix = shlex.split(command, posix=False)
     print(f"{split_nonposix=}")
+
+
+def main():
+
+    python = shutil.which("python")
+    command = f'{python} cli.py --foo bar --quz "with extra args"'
+    print(f"{command=}")
+
+    for posix in True, False:
+        print(f"{posix=}")
+        split = shlex.split(command, posix=posix)
+        print(f"{split=}")
+
+        try:
+            p = subprocess.run(split, capture_output=True)
+            print(f"{p}")
+            print(f"{p.stdout=}")
+            print(f"{p.stderr=}")
+        except subprocess.CalledProcessError as exc:
+            print(f"Failed to run: {exc}")
+            print(f"{exc.stdout=}")
+            print(f"{exc.stderr=}")
+        print("-" * 30)
 
 
 if __name__ == "__main__":
