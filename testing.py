@@ -1,4 +1,6 @@
 import os
+import shlex
+import shutil
 import subprocess
 import tempfile
 
@@ -65,7 +67,7 @@ def main_subprocess_run():
         print(f"{exc.stderr=}")
 
 
-def main():
+def main_encoding():
     import locale
     import sys
 
@@ -89,6 +91,28 @@ def main():
         print(f"{exc.stderr=}")
 
     print(p.stdout.split(b"\n"))
+
+
+def main():
+    path = os.path.join(os.sep, "path", "to", "executable")
+    print(f"{path=}")
+    print(f"{os.path.isabs(path)=}")
+    git_path = shutil.which("git")
+    print(f"{git_path=}")
+    found_path = shutil.which(git_path)
+    print(f"{found_path=}")
+    nonexisting_path = os.path.join(os.sep, "path", "to", "exe")
+    print(f"{os.path.isabs(nonexisting_path)=}")
+    found_nonexisting = shutil.which(nonexisting_path)
+    print(f"{nonexisting_path=}")
+    print(f"{found_nonexisting=}")
+
+    command = f'{nonexisting_path} --foo bar --quz "with extra args"'
+    print(f"{command=}")
+    split = shlex.split(command)
+    print(f"{split=}")
+    split_nonposix = shlex.split(command, posix=False)
+    print(f"{split_nonposix=}")
 
 
 if __name__ == "__main__":
