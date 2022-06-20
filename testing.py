@@ -2,6 +2,7 @@ import os
 import shlex
 import shutil
 import subprocess
+import sys
 import tempfile
 
 
@@ -124,6 +125,8 @@ def main():
     for posix in True, False:
         print(f"{posix=}")
         split = shlex.split(command, posix=posix)
+        print(f"{sys.platform=}")
+        split[0] = command.split(maxsplit=1)[0]
         print(f"{split=}")
 
         try:
