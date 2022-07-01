@@ -141,7 +141,7 @@ def main_shlex():
         print("-" * 30)
 
 
-def main():
+def main_path():
     print("path=", os.environ["PATH"])
     git_credential_store = shutil.which("git-credential-store")
     print(f"{git_credential_store=}")
@@ -151,11 +151,38 @@ def main():
     ).strip()
 
     p = subprocess.run(
-        os.path.join(exec_path, "git-credential-store"), universal_newlines=True, capture_output=True
+        os.path.join(exec_path, "git-credential-store"),
+        universal_newlines=True,
+        capture_output=True,
     )
     print(f"{p}")
     print(f"{p.stdout=}")
     print(f"{p.stderr=}")
+
+
+def main():
+    import docker
+
+    client = docker.from_env()
+    try:
+        print(f"{client.ping()=}")
+    except docker.errors.APIError:
+        print("Failed to communicate with the docker client")
+        sys.exit(0)
+
+    image = "python:3.8-slim"
+    print(f"{sys.platform=}")
+    pulled = client.images.pull(image)
+    print(f"{pulled=}")
+    res = client.containers.run(
+        image,
+        command="python -c 'print(\"hello\")'",
+        stdout=True,
+        stderr=True,
+        # detach=True,
+        remove=True,
+    )
+    print(f"{res=}")
 
 
 if __name__ == "__main__":
