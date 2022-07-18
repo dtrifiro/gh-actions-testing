@@ -5,8 +5,6 @@ import subprocess
 import sys
 import tempfile
 
-import pygit2
-
 
 def main_credential_store():
     path = os.path.join(tempfile.gettempdir(), "dulwich-git-credential-store-test")
@@ -192,7 +190,10 @@ def main():
     os.makedirs(tree)
     with open(os.path.join(tree, "file"), "w") as fh:
         fh.write("text\n")
-    r = pygit2.Repository(".")
+
+    from pygit2 import Repository
+
+    r = Repository(".")
     status = r.status()
 
     for file in status.keys():
@@ -206,9 +207,18 @@ def main():
 
     from subprocess import run
 
-    res = run("git status --untracked-files=all".split(" "), check=True, capture_output=True)
+    res = run(
+        "git status --untracked-files=all".split(" "), check=True, capture_output=True
+    )
 
     print(f"With git:\n{res.stdout.decode()}")
+
+    print("with scmrepo:")
+    from scmrepo.git import Git
+
+    git = Git()
+
+    print(git.status(untracked_files="all"))
 
 
 if __name__ == "__main__":
