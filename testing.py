@@ -5,6 +5,8 @@ import subprocess
 import sys
 import tempfile
 
+import pygit2
+
 
 def main_credential_store():
     path = os.path.join(tempfile.gettempdir(), "dulwich-git-credential-store-test")
@@ -160,7 +162,7 @@ def main_path():
     print(f"{p.stderr=}")
 
 
-def main():
+def main_docker():
     import docker
 
     client = docker.from_env()
@@ -183,6 +185,30 @@ def main():
         remove=True,
     )
     print(f"{res=}")
+
+
+def main():
+    tree = os.path.join("dir", "subdir", "subsubdir")
+    os.makedirs(tree)
+    with open(os.path.join(tree, "file"), "w") as fh:
+        fh.write("text\n")
+    r = pygit2.Repository(".")
+    status = r.status()
+
+    for file in status.keys():
+        print(file)
+
+    print("With dulwich:")
+    from dulwich.porcelain import status
+
+    result = status()
+    print(result)
+
+    from subprocess import run
+
+    res = run("git status --untracked-files=all".split(" "), check=True, capture_output=True)
+
+    print(f"With git:\n{res.stdout.decode()}")
 
 
 if __name__ == "__main__":
