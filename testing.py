@@ -219,6 +219,18 @@ def main():
     git = Git()
 
     print(git.status(untracked_files="all"))
+    with open("anewfile", "w") as fh:
+        fh.write("anewfile")
+    git.add(["anewfile"])
+    print(f"after add: {git._last_backend=}")
+    git.status()
+    print(f"after status: {git._last_backend=}")
+    git.commit("commit")
+    print(f"after commit: {git._last_backend=}")
+    git.reset()
+    print(f"after reset: {git._last_backend=}")
+    git.status()
+    print(f"after status: {git._last_backend=}")
 
 
 if __name__ == "__main__":
