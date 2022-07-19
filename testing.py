@@ -186,62 +186,32 @@ def main_docker():
 
 
 def main():
-    tree = os.path.join("dir", "subdir", "subsubdir")
-    os.makedirs(tree)
-    with open(os.path.join(tree, "file"), "w") as fh:
-        fh.write("text\n")
-
-    from pygit2 import Repository
-
-    r = Repository(".")
-    status = r.status()
-
-    for file in status.keys():
-        print(file)
-
-    print("With dulwich:")
-    from dulwich.porcelain import status
-
-    result = status()
-    print(result)
-
-    from subprocess import run
-
-    res = run(
-        "git status --untracked-files=all".split(" "), check=True, capture_output=True
-    )
-
-    print(f"With git:\n{res.stdout.decode()}")
-
-    print("with scmrepo:")
     from scmrepo.git import Git
 
     git = Git()
-
-    print(git.status(untracked_files="all"))
-    print(f"after untrackedall status: {git._last_backend=}")
-    print("-" * 30, end="\n\n")
-    git = Git()
+    tree = os.path.join("dir", "subdir")
+    os.makedirs(tree, exist_ok=True)
     newfile = os.path.join(tree, "newfile")
     with open(newfile, "w") as fh:
         fh.write("anewfile")
-    print(git.status())
-    print(f"after status: {git._last_backend=}")
     git.add([newfile])
-    print(f"after add: {git._last_backend=}")
-    print(git.status())
-    print(f"after status: {git._last_backend=}")
     git.commit("commit")
-    print(f"after commit: {git._last_backend=}")
-    git.reset()
-    print(f"after reset: {git._last_backend=}")
+
+    with open(newfile, "w") as fh:
+        fh.write("anewfile modified")
+    git.add([newfile])
     newfile1 = os.path.join(tree, "newfile1")
     with open(newfile1, "w") as fh:
         fh.write("anewfile1")
-    git.add([newfile1], update=True)
-    print(f"after add: {git._last_backend=}")
-    print(git.status())
-    print(f"after status: {git._last_backend=}")
+    git.add([newfile1])
+    with open(newfile, "a") as fh:
+        fh.write("newcontent")
+    untracked = os.path.join(tree, "untracked")
+    with open(untracked, "w") as fh:
+        fh.write("untracked")
+
+    staged, modified, untracked = git.dulwich.status()
+    print(f"dulwich: {staged=}, {modified=}, {untracked=}")
 
 
 if __name__ == "__main__":
