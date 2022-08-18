@@ -174,7 +174,8 @@ def main_docker():
     client = docker.from_env(
         environment={
             **os.environ,
-            "DOCKER_HOST": "tcp://localhost:2375",  # override docker host
+            # "DOCKER_HOST": "tcp://localhost:2375",  # override docker host
+            "DOCKER_HOST": "npipe:////./pipe/docker_engine",  # override docker host
         }
     )
 
