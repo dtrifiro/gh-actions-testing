@@ -161,9 +161,23 @@ def main_path():
 
 
 def main_docker():
+    import os
+
     import docker
 
+    docker_host = os.getenv("DOCKER_HOST", "not defined")
+    print(f"{docker_host=}")
+
     client = docker.from_env()
+    print(f"{client.api.base_url=}")
+    print("new")
+    client = docker.from_env(
+        environment={
+            **os.environ,
+            "DOCKER_HOST": "tcp://localhost:2375",  # override docker host
+        }
+    )
+
     try:
         print(f"{client.ping()=}")
     except docker.errors.APIError:
