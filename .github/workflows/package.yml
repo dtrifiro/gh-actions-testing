@@ -18,8 +18,7 @@ jobs:
     steps:
       - name: run
         run: |
-          env
-          docker ps
+          docker run uname -a
           netstat -an
 
       # - uses: actions/checkout@v2
