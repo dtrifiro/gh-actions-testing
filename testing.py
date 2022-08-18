@@ -185,7 +185,7 @@ def main_docker():
     print(f"{res=}")
 
 
-def main():
+def main_git():
     from scmrepo.git import Git
 
     git = Git()
@@ -213,6 +213,8 @@ def main():
     staged, modified, untracked = git.dulwich.status()
     print(f"dulwich: {staged=}, {modified=}, {untracked=}")
 
+
+main = main_docker
 
 if __name__ == "__main__":
     main()
