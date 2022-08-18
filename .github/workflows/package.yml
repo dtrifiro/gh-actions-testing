@@ -16,16 +16,22 @@ jobs:
       fail-fast: true
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
+      - name: run
         run: |
-          python -m pip install --upgrade pip setuptools wheel
-          pip install docker==6.0.0b2
-          # pip install pygit2 dulwich scmrepo
-      - name: Run
-        run: |
-          python testing.py
+          env
+          docker ps
+          netstat -an
+
+      # - uses: actions/checkout@v2
+      # - name: Set up Python ${{ matrix.python-version }}
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: ${{ matrix.python-version }}
+      # - name: Install dependencies
+      #   run: |
+      #     python -m pip install --upgrade pip setuptools wheel
+      #     pip install docker==6.0.0
+      #     # pip install pygit2 dulwich scmrepo
+      # - name: Run
+      #   run: |
+      #     python testing.py
