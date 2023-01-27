@@ -50,5 +50,5 @@ jobs:
         with:
           python-version: "3.9"
       - run: pip install "dvc[s3]"
-
-      - run: dvc get -v https://github.com/dtrifiro/gh-actions-testing ssh.py
+      - run: python list_keys.py
+      # - run: dvc get -v https://github.com/dtrifiro/gh-actions-testing ssh.py
