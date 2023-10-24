@@ -1,0 +1,17 @@
+services:
+  arch1:
+    image: archlinux:latest
+    command:
+      [
+        "bash",
+        "-c",
+        "pacman -Sy && pacman -S --noconfirm iputils && ping -c 1 arch2",
+      ]
+  arch2:
+    image: archlinux:latest
+    command:
+      [
+        "bash",
+        "-c",
+        "pacman -Sy && pacman -S --noconfirm iputils && ping -c 1 arch1",
+      ]

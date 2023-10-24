@@ -6,26 +6,12 @@ on:
 
 jobs:
   testing:
-    strategy:
-      fail-fast: true
-      matrix:
-        # os: [macos-latest, windows-latest, ubuntu-latest]
-        # os: [ubuntu-latest]
-        version: ["3.8", "3.9", "3.10", "3.11"]
-        include:
-          - version: "3.8"
-            extra: ""
-          - version: "3.8"
-            extra: "extra-3.8"
-          - version: "3.8"
-            extra: "extra-3.8-1"
-
-    # runs-on: ${{ matrix.os }}
     runs-on: ubuntu-latest
 
     steps:
-      - name: Matrix ${{ matrix.version }} ${{ matrix.extra }}
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: docker compose
         run: |
-          # echo "os: ${{matrix.os}}"
-          echo "version: ${{matrix.version}}"
-          echo "extra: ${{matrix.extra}}"
+          docker-compose up
