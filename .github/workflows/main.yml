@@ -12,7 +12,15 @@ jobs:
       - uses: actions/checkout@v3
       - name: print env
         run: env
-      - name: get tag/ref
+
+      - name: Executes only for a tag
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          echo "ref is: "${{ github.ref }}
+          echo "ref_name is: "${{ github.ref_name }}
+
+      - name: Executes only if not a tag
+        if: ${{ ! startsWith(github.ref, 'refs/tags/') }}
         run: |
           echo "ref is: "${{ github.ref }}
           echo "ref_name is: "${{ github.ref_name }}
