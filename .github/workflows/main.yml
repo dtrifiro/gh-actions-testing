@@ -10,12 +10,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: print notice
+      - name: "pip install"
         run: |
-          echo ::notice title="notice title"::"this is the notice message"
-      - name: print warning
-        run: |
-          echo ::warning title="warning title"::"this is the warning message"
-      - name: print error
-        run: |
-          echo ::error title="error title"::"this is the error message"
+          pip install caikit-nlp-client
