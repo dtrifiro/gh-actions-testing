@@ -6,10 +6,29 @@ on:
 
 jobs:
   testing:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - uses: actions/checkout@v3
-      - name: "pip install"
+      - name: install tmate
         run: |
-          pip install caikit-nlp-client
+          brew install tmate
+
+      - name: Use colima as default docker host on MacOS
+        run: |
+          brew install docker
+          colima start
+          ls -la $HOME/.colima/default/docker.sock
+          sudo ln -sf $HOME/.colima/default/docker.sock /var/run/docker.sock
+          ls -la /var/run/docker.sock
+
+      - name: run container
+        run: |
+          docker pull python:3.12-slim
+          docker run -it -d -p 8000:8000 python:3.12-slim python -m http.server
+          curl localhost:8000
+
+      - name: run tmate
+        if: failure()
+        run: |
+          tmate -F
