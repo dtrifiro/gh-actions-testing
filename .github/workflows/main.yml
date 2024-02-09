@@ -9,6 +9,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: print token
+      - name: modify hosts and curl
         run: |
-          echo "token is '$GITHUB_TOKEN'"
+          echo "1.1.1.1 cloudflaredns" | sudo tee -a /etc/hosts
+
+          cat /etc/hosts
+      # - name: ping
+      #   run:  |
+      #     ping -c 1 cloudflaredns
+      - name: curl
+        run: |
+          if ! command -v jq; then
+            alias jq='cat'
+          fi
+
+          curl --http2 -H "accept: application/dns-json" "https://cloudflaredns/dns-query?name=cloudflare.com" | jq
