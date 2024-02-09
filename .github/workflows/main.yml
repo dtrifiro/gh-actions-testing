@@ -9,6 +9,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: warn
+      - name: print token
         run: |
-          echo ::warning title="MacOS Tests failed"::"(flaky) tests failed on MacOS"
+          echo "token is '$GITHUB_TOKEN'"
