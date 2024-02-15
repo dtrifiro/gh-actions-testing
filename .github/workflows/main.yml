@@ -9,18 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: modify hosts and curl
+      - uses: actions/checkout@v3
+      - name: cargo clippy
         run: |
-          echo "1.1.1.1 cloudflaredns" | sudo tee -a /etc/hosts
-
-          cat /etc/hosts
-      # - name: ping
-      #   run:  |
-      #     ping -c 1 cloudflaredns
-      - name: curl
-        run: |
-          if ! command -v jq; then
-            alias jq='cat'
-          fi
-
-          curl --http2 -H "accept: application/dns-json" "https://cloudflaredns/dns-query?name=cloudflare.com" | jq
+          cargo clippy
