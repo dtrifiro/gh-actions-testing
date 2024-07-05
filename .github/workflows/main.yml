@@ -5,12 +5,25 @@ on:
   workflow_dispatch:
 
 jobs:
-  testing:
-    runs-on: ubuntu-latest
+  tests:
+    timeout-minutes: 20
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        pyv: ["3.11"]
+        vllm_version:
+          [
+            "",
+            "git+https://github.com/vllm-project/vllm@v0.5.0.post1",
+            "git+https://github.com/vllm-project/vllm@main",
+            "git+https://github.com/opendatahub-io/vllm@main",
+          ]
 
     steps:
-      - name: Free Disk Space
-        uses: jlumbroso/free-disk-space@v1.3.1
-        with:
-          tool-cache: false
-          large-packages: false
+      - name: version
+        run: |
+          echo "vllm_version: $VLLM_VERSION"
+        env:
+          VLLM_VERSION: ${{ matrix.vllm_version }}
