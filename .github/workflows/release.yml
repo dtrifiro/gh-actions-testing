@@ -1,0 +1,66 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - v*
+
+# Needed to create release and upload assets
+permissions:
+  contents: write
+
+jobs:
+  release:
+    # Retrieve tag and create release
+    name: Create Release
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Extract branch info
+        shell: bash
+        run: |
+          echo "release_tag=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
+      - name: Create Release
+        id: create_release
+        uses: "actions/github-script@v6"
+        env:
+          RELEASE_TAG: ${{ env.release_tag }}
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          script: |
+            const script = require('.github/workflows/scripts/create_release.js')
+            await script(github, context, core)
+
+  wheel:
+    name: Build Wheel
+    runs-on: ${{ matrix.os }}
+    needs: release
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-20.04"]
+        python-version: [
+            # '3.8', '3.9', '3.10', '3.11', '
+            3.12',
+          ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Check the git rev
+        run: |
+          git rev-parse --short HEAD
+          git describe --tags
+          git tag --list --sort=-creatordate --format="%(authordate:relative)%09│ %(refname:short)"
