@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=48", "setuptools_scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "proj"
+description = "testing some reandom stuff"
+license = {text = "GNU GPL v3.0"}
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+  "Development Status :: 4 - Beta"
+]
+requires-python = ">=3.12"
+dynamic = ["version"]
+dependencies = [ ]
