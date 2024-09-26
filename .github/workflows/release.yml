@@ -33,7 +33,7 @@ jobs:
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           script: |
-            const script = require('.github/workflows/scripts/create_release.js')
+            const script = require('.github/workflows/create_release.js')
             await script(github, context, core)
 
   wheel:
