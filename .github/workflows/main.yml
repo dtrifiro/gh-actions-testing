@@ -25,5 +25,6 @@ jobs:
       - name: version
         run: |
           echo "vllm_version: $VLLM_VERSION"
+          whoami
         env:
           VLLM_VERSION: ${{ matrix.vllm_version }}
