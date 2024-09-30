@@ -22,9 +22,8 @@ jobs:
           ]
 
     steps:
-      - name: version
+      - name: check env
         run: |
-          echo "vllm_version: $VLLM_VERSION"
-          whoami
-        env:
-          VLLM_VERSION: ${{ matrix.vllm_version }}
+          echo env:
+          env
+          echo "----"
