@@ -15,4 +15,4 @@ index 1150da8..2b1467c 100644
  tgis-image=quay.io/modh/text-generation-inference@sha256:bc9970b7f6be38266cc0c02155d377ee1f96862ea96d166dd3130c5d83c9a723
  ovms-image=quay.io/modh/openvino_model_server@sha256:38e8cdf152622371ba0330c02091a8d54b39c14de1d4b8f0bb696dcf0e6d4398
 -vllm-image=quay.io/modh/vllm@sha256:2e10031587b1dfb782b9dc030ed256d69d1b2219a9b53e75a913e27b59e065e7
-+vllm-image=quay.io/modh/vllm@sha256:ce5a8e5fc91442229ea4f54ea251cf65f10d383021138f8f0d55dcc5c3eb038b
++vllm-image=quay.io/modh/vllm@sha256:0bccb0fec2a75d9cc622668a7a5262d6b1c6a0576e4ca9c006136208cb1850c8
