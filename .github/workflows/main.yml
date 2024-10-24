@@ -7,23 +7,32 @@ on:
 jobs:
   tests:
     timeout-minutes: 20
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
-        pyv: ["3.11"]
-        vllm_version:
-          [
-            "",
-            "git+https://github.com/vllm-project/vllm@v0.5.0.post1",
-            "git+https://github.com/vllm-project/vllm@main",
-            "git+https://github.com/opendatahub-io/vllm@main",
-          ]
+    runs-on: ubuntu-latest
 
     steps:
-      - name: check env
+      - uses: actions/checkout@v4
+
+      - name: get patch new digest
+        id: parse_diff
         run: |
-          echo env:
-          env
-          echo "----"
+          # echo "digest=$(git diff HEAD~ | grep +vllm | grep sha256 | cut -d @ -f 2 )" | tee --append $GITHUB_OUTPUT
+
+          # testing only:
+          echo "digest=$(cat patch.diff | grep +vllm | grep sha256 | cut -d @ -f 2 )" | tee --append $GITHUB_OUTPUT
+
+      - name: tag info
+        id: validate_digest
+        continue-on-error: true
+        run: |
+          echo "parsed digest: ${{ steps.parse_diff.outputs.digest }}"
+          python validate_digest.py ${{ steps.parse_diff.outputs.digest }}
+
+      - name: Close PR on failure
+        if: ${{ steps.validate_digest.outcome == 'failure'}}
+        run: |
+          echo "Closing PR: it corresponds to a non-CUDA build"
+
+      - name: Merge PR on success
+        if: ${{ steps.validate_digest.outcome == 'success'}}
+        run: |
+          echo "Merging PR"
