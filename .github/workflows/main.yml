@@ -1,18 +1,25 @@
-name: Conditional Job Example
+name: Matrix fromjson example
 
 on: [push]
 
 jobs:
-  job1:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Simulate failure
-        run: exit 1 # This simulates a failure
+  # setup:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - id: matrix
+  #       run: |
+  #         echo value="[{'key': 'value', 'another_key': 'another value'}]" >> $GITHUB_OUTPUT
 
-  job2:
+  run:
     runs-on: ubuntu-latest
-    needs: [job1]
-    if: failure()
+    # needs: [setup]
+    strategy:
+      matrix:
+        # mapping: ${{ fromJSON(needs.setup.outputs.matrix) }}
+        mapping: [{ "key": "value", "anotherkey": "anothervalue" }]
     steps:
-      - name: Handle failure
-        run: echo "job1 failed"
+      - name: print keys
+        run: |
+          echo "key='${{ matrix.mapping.key }}'"
+          echo "another_key='${{ matrix.mapping.another_key }}'"
+          echo "missing_key='${{ matrix.mapping.missing_key }}'"
