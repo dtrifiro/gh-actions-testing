@@ -1,25 +1,28 @@
-name: Matrix fromjson example
+name: Test reusable workflows
 
 on: [push]
 
 jobs:
-  # setup:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - id: matrix
-  #       run: |
-  #         echo value="[{'key': 'value', 'another_key': 'another value'}]" >> $GITHUB_OUTPUT
+  run-reusable:
+    uses: ./.github/workflows/reusable.yml
+    with:
+      example: "example value"
+      conditional: true
 
-  run:
+  run-composite:
     runs-on: ubuntu-latest
-    # needs: [setup]
-    strategy:
-      matrix:
-        # mapping: ${{ fromJSON(needs.setup.outputs.matrix) }}
-        mapping: [{ "key": "value", "anotherkey": "anothervalue" }]
+
     steps:
-      - name: print keys
-        run: |
-          echo "key='${{ matrix.mapping.key }}'"
-          echo "another_key='${{ matrix.mapping.another_key }}'"
-          echo "missing_key='${{ matrix.mapping.missing_key }}'"
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: run reusable workflow
+        uses: ./.github/workflows/reusable.yml
+        with:
+          example: "example value"
+          conditional: true
+
+      - name: run reusable workflow, test default values
+        uses: ./.github/workflows/reusable.yml
