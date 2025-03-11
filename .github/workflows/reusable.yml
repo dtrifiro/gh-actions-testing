@@ -17,6 +17,11 @@ on:
         type: string
         required: false
         default: "ubuntu-latest"
+      optional-var:
+        description: "Optional variable"
+        type: string
+        required: false
+        default:
 
 jobs:
   job1:
@@ -37,3 +42,7 @@ jobs:
         if: ${{inputs.conditional}}
         run: |
           echo "conditional is true"
+
+      - name: Print optional value
+        run: |
+          echo optional ${{ inputs.optional-var || 'diocane'}}

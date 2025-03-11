@@ -9,20 +9,9 @@ jobs:
       example: "example value"
       conditional: true
 
-  run-composite:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: run reusable workflow
-        uses: ./.github/workflows/reusable.yml
-        with:
-          example: "example value"
-          conditional: true
-
-      - name: run reusable workflow, test default values
-        uses: ./.github/workflows/reusable.yml
+  run-reusable-depends:
+    needs: run-reusable
+    uses: ./.github/workflows/reusable.yml
+    with:
+      example: "example value"
+      conditional: true
