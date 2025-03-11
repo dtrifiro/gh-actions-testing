@@ -3,15 +3,17 @@ name: Test reusable workflows
 on: [push]
 
 jobs:
-  run-reusable:
-    uses: ./.github/workflows/reusable.yml
-    with:
-      example: "example value"
-      conditional: true
+  main:
+    runs-on: ubuntu-latest
 
-  run-reusable-depends:
-    needs: run-reusable
-    uses: ./.github/workflows/reusable.yml
-    with:
-      example: "example value"
-      conditional: true
+    steps:
+      - run: |
+          echo ${{secrets.mysecret}} >> secretfile
+      - run: |
+          with open("secretfile") as fh:
+            data=fh.read()
+
+          for piece in data:
+            print(piece)
+
+        shell: python
