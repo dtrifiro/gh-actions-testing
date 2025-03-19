@@ -1,25 +1,17 @@
-name: Test dynamic matrix
+name: Test empty inputs
 
-on: [push]
+on:
+  push:
+
+  workflow_dispatch:
+    inputs:
+      test:
+        description: "test"
+        required: false
 
 jobs:
-  prepare-matrix:
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.prepare-matrix.outputs.values }}
-    steps:
-      - name: Read targets from file
-        id: prepare-matrix
-        run: |
-          echo "values=[1, 2, 3]" | tee -a $GITHUB_OUTPUT
-
   build:
     runs-on: ubuntu-latest
-    needs: prepare-matrix
-    strategy:
-      matrix:
-        target: ${{ fromJson(needs.prepare-matrix.outputs.matrix) }} # Use the output from the first job
-
     steps:
       - run: |
-          echo "target=${{matrix.target}}"
+          echo "target=${{inputs.test}}"
