@@ -25,6 +25,9 @@ jobs:
           env > env_pre_uv.txt
           python --version | tee -a env_pre_uv.txt
 
+          which python
+          ls -l  $(which python)
+
       - name: Install the latest version of uv and set the python version
         uses: astral-sh/setup-uv@v5
         with:
@@ -34,5 +37,8 @@ jobs:
         run: |
           env > env_post_uv.txt
           python --version | tee -a env_post.txt
+
+          which python
+          ls -l  $(which python)
 
           diff env_pre_uv.xt env_post_uv.txt
