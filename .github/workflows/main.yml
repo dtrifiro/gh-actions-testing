@@ -36,9 +36,9 @@ jobs:
       - name: check env post uv
         run: |
           env > env_post_uv.txt
-          python --version | tee -a env_post.txt
+          python --version | tee -a env_post_uv.txt
 
           which python3.12
           ls -l  $(which python3.12)
 
-          diff env_pre_uv.xt env_post_uv.txt
+          diff env_pre_uv.txt env_post_uv.txt
