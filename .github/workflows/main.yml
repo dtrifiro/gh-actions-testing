@@ -18,6 +18,8 @@ jobs:
           echo "VIRTUAL_ENV=/opt/venv" | tee -a "$GITHUB_OUTPUT"
           echo "PATH=/opt/venv/bin:$PATH" | tee -a "$GITHUB_OUTPUT"
 
+          echo "UV_PYTHON_PREFERENCE=system" | tee -a "$GITHUB_OUTPUT"
+
       - name: check env
         run: |
           env > env_pre_uv.txt
