@@ -18,15 +18,15 @@ jobs:
           echo "VIRTUAL_ENV=/opt/venv" | tee -a "$GITHUB_OUTPUT"
           echo "PATH=/opt/venv/bin:$PATH" | tee -a "$GITHUB_OUTPUT"
 
-          echo "UV_PYTHON_PREFERENCE=system" | tee -a "$GITHUB_OUTPUT"
+          #echo "UV_PYTHON_PREFERENCE=system" | tee -a "$GITHUB_OUTPUT"
 
       - name: check env
         run: |
           env > env_pre_uv.txt
           python --version | tee -a env_pre_uv.txt
 
-          which python
-          ls -l  $(which python)
+          which python3.12
+          ls -l  $(which python3.12)
 
       - name: Install the latest version of uv and set the python version
         uses: astral-sh/setup-uv@v5
@@ -38,7 +38,7 @@ jobs:
           env > env_post_uv.txt
           python --version | tee -a env_post.txt
 
-          which python
-          ls -l  $(which python)
+          which python3.12
+          ls -l  $(which python3.12)
 
           diff env_pre_uv.xt env_post_uv.txt
