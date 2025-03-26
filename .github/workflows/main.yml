@@ -13,12 +13,12 @@ jobs:
           uses: ./.github/actions/composite
 
       - run: |
-          echo "var_name=var_value" | tee -a "$GITHUB_ENV"
-
+          echo "EOF syntax"
           cat <<EOF
           var_name=${var_name}
           var_name (github mustache)=${{env.var_name}}
           EOF
 
+          echo "standard syntax syntax"
           echo var_name=${var_name}
           echo "var_name (github mustache)=${{env.var_name}}"
