@@ -6,6 +6,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        var: ["", "var_value"]
     steps:
       - uses: actions/checkout@v4
       - uses: jenseng/dynamic-uses@v1
@@ -13,13 +16,23 @@ jobs:
           uses: ./.github/actions/composite
 
       - run: |
+          echo "standard syntax"
+          echo var_name=${var_name}
+          echo "var_name (github mustache)=${{env.var_name}}"
+
+
           echo "EOF syntax"
           cat <<EOF
           var_name=${var_name}
           var_name (github mustache)=${{env.var_name}}
           EOF
 
-          echo "standard syntax syntax"
-          echo var_name=${var_name}
-          echo "var_name (github mustache)=${{env.var_name}}"
+      - run: |
+          cat <<EOF
+          matrix value is set to $MATRIX_VALUE
+          echo "end of eof block"
+          EOF
+        if: ${{matrix.var}}
         shell: bash
+        env:
+          MATRIX_VALUE: ${{matrix.var}}
