@@ -4,7 +4,9 @@ runs:
   steps:
     - run: |
         echo "var_name=var_value" | tee -a "$GITHUB_ENV"
-
+      shell: bash
+    - run: |
+        echo after setting
         echo "in dynamic uses, EOF syntax"
         cat <<EOF
         var_name=${var_name}
