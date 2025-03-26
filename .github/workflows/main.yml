@@ -1,4 +1,4 @@
-name: Test empty inputs
+name: Test dynamic uses
 
 on:
   push:
@@ -6,39 +6,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: registry.access.redhat.com/ubi8/ubi-minimal
     steps:
-      - name: install python
-        run: |
-          microdnf install -y python3.12-pip tar gzip diffutils which
-      - name: setup venv
-        run: |
-          python -m venv /opt/venv
-          echo "VIRTUAL_ENV=/opt/venv" | tee -a "$GITHUB_OUTPUT"
-          echo "PATH=/opt/venv/bin:$PATH" | tee -a "$GITHUB_OUTPUT"
-
-          #echo "UV_PYTHON_PREFERENCE=system" | tee -a "$GITHUB_OUTPUT"
-
-      - name: check env
-        run: |
-          env > env_pre_uv.txt
-          python --version | tee -a env_pre_uv.txt
-
-          which python3.12
-          ls -l  $(which python3.12)
-
-      - name: Install the latest version of uv and set the python version
-        uses: astral-sh/setup-uv@v5
+      - uses: actions/checkout@v4
+      - uses: jenseng/dynamic-uses@v1
         with:
-          python-version: 3.13
-
-      - name: check env post uv
-        run: |
-          env > env_post_uv.txt
-          python --version | tee -a env_post_uv.txt
-
-          which python3.12
-          ls -l  $(which python3.12)
-
-          diff env_pre_uv.txt env_post_uv.txt
+          uses: ./.github/actions/composite

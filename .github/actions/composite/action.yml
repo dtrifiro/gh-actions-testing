@@ -1,0 +1,11 @@
+name: run-composite
+runs:
+  using: composite
+  steps:
+    - run: |
+        echo "var_name=var_value" | tee -a "$GITHUB_ENV"
+
+        cat <<EOF
+        var_name=${var_name}
+        EOF
+      shell: bash
