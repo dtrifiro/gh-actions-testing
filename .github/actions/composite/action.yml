@@ -7,5 +7,6 @@ runs:
 
         cat <<EOF
         var_name=${var_name}
+        var_name (github mustache)=${{env.var_name}}
         EOF
       shell: bash
