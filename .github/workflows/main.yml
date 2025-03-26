@@ -11,3 +11,14 @@ jobs:
       - uses: jenseng/dynamic-uses@v1
         with:
           uses: ./.github/actions/composite
+
+      - run: |
+          echo "var_name=var_value" | tee -a "$GITHUB_ENV"
+
+          cat <<EOF
+          var_name=${var_name}
+          var_name (github mustache)=${{env.var_name}}
+          EOF
+
+          echo var_name=${var_name}
+          echo "var_name (github mustache)=${{env.var_name}}"
