@@ -1,16 +1,21 @@
-name: Test dynamic uses
+name: Test bake action
 
 on:
-    push:
+  push:
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                var: ["", "var_value"]
-        steps:
-            - uses: actions/checkout@v4
-            - run: |
-                  echo "$GITHUB_REPO"
-                  env | grep GITHUB_
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: print github variables
+        run: |
+          env | grep GITHUB_
+
+      - name: Bake, build and push
+        uses: docker/bake-action@v6
+        with:
+          # files: docker-bake-hcl
+          source: .
+          workdir: .
+          push: false
