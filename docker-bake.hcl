@@ -1,3 +1,6 @@
+variable REPOSITORY {
+  default = "ghcr.io/myorg/myrepo"
+}
 variable "GITHUB_SHA" {}
 variable "GITHUB_REPO" {}
 variable "GITHUB_RUN_ID" {}

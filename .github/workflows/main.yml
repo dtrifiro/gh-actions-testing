@@ -7,15 +7,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # - uses: actions/checkout@v4
+      # - name: print github variables
+      #   run: |
+      #     env | grep GITHUB_
       - name: print github variables
         run: |
-          env | grep GITHUB_
+          echo ::warning::{this is something}
 
-      - name: Bake, build and push
-        uses: docker/bake-action@v6
-        with:
-          # files: docker-bake-hcl
-          source: .
-          workdir: .
-          push: false
+          export VAR="var value"
+          echo ::warning::\{VAR=${VAR}\}
+
+      # - name: Bake, build and push
+      #   uses: docker/bake-action@v6
+      #   with:
+      #     # files: docker-bake-hcl
+      #     source: .
+      #     workdir: .
+      #     push: false
