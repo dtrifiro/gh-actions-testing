@@ -7,26 +7,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - shell: bash
-        id: check_os
+      - name: it's a tag
+        if: startsWith(github.ref, 'refs/tags/')
         run: |
-          if command -v apt-get &>/dev/null; then
-            echo "os=ubuntu" | tee -a "$GITHUB_OUTPUT"
-          elif command -v microdnf &>/dev/null; then
-            echo "os=ubi-minimal" | tee -a "$GITHUB_OUTPUT"
-          else
-            echo "::error::unknown OS"
-            exit 1
-          fi
-      - shell: bash
-        if: steps.check_os.outputs.os == 'ubuntu'
+          echo this is a tag!
+      - name: it's NOT a tag
+        if: ! startsWith(github.ref, 'refs/tags/')
         run: |
-          echo ubuntu
-          exit 0
-
-      - shell: bash
-        if: steps.check_os.outputs.os == 'ubi-minimal'
-        run: |
-          curl -LO https://cli.github.com/packages/rpm/gh-cli.repo
-          sudo mv gh-cli.repo /etc/yum.repos.d/
-          microdnf install -y gh
+          echo this is NOT a tag!
