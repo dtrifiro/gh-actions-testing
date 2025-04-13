@@ -16,3 +16,7 @@ jobs:
           echo github.ref=${{github.ref}}
           echo github.ref_name=${{github.ref_name}}
           echo startswith=${{startsWith(github.ref, 'refs/tags/')}}
+      - name: release
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          echo release
