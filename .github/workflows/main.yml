@@ -7,21 +7,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # - uses: actions/checkout@v4
-      # - name: print github variables
-      #   run: |
-      #     env | grep GITHUB_
-      - name: print github variables
+      - shell: bash
+        id: check_os
         run: |
-          echo ::warning::{this is something}
+          if command -v apt-get &>/dev/null; then
+            echo "os=ubuntu" | tee -a "$GITHUB_OUTPUT"
+          elif command -v microdnf &>/dev/null; then
+            echo "os=ubi-minimal" | tee -a "$GITHUB_OUTPUT"
+          else
+            echo "::error::unknown OS"
+            exit 1
+          fi
+      - shell: bash
+        if: steps.check_os.outputs.os == 'ubuntu'
+        run: |
+          echo ubuntu
+          exit 0
 
-          export VAR="var value"
-          echo ::warning::\{VAR=${VAR}\}
-
-      # - name: Bake, build and push
-      #   uses: docker/bake-action@v6
-      #   with:
-      #     # files: docker-bake-hcl
-      #     source: .
-      #     workdir: .
-      #     push: false
+      - shell: bash
+        if: steps.check_os.outputs.os == 'ubi-minimal'
+        run: |
+          curl -LO https://cli.github.com/packages/rpm/gh-cli.repo
+          sudo mv gh-cli.repo /etc/yum.repos.d/
+          microdnf install -y gh
