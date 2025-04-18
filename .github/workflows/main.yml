@@ -10,9 +10,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: archlinux:latest
     steps:
-      - name: run
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14.0-alpha.7"
+
+      - name: check version
         run: |
-          pacman -Sy htop --noconfirm
-          uname -a
+          python --version
