@@ -1,20 +1,13 @@
-name: Test Release
+name: Test env
 
 on:
   push:
-  release:
-    types:
-      - published
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.14"
-
-      - name: check version
+      - name: env
         run: |
-          python --version
+          env
