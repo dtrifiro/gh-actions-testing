@@ -1,18 +1,42 @@
-name: python windows test
-
 on:
   push:
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
-      - name: setup-python
-        uses: actions/setup-python@v4
-      - name: print
-        run: |
-          import sys
+      - run: |
+          curl -LO https://github.com/mozilla/sccache/releases/download/v0.10.0/sccache-v0.10.0-x86_64-unknown-linux-musl.tar.gz
+          tar -xf *.tar.gz
 
-          print([el for el in sys.modules if "readline" in el])
-        shell: python
+          mv **/sccache ./
+        shell: bash
+
+      - run: |
+          export PATH=$PWD:$PATH
+
+          WHL_EMOJI="✅"
+          echo ""
+          echo "| Parameter | |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| label: | \`this-is-my-label\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| github actor: | '${{ github.actor }}' |" >> $GITHUB_STEP_SUMMARY
+          echo "| CI/CD gitref: | '${{ inputs.gitref }}' |" >> $GITHUB_STEP_SUMMARY
+          echo "| wf_category: | NIGHTLY |" >> $GITHUB_STEP_SUMMARY
+          echo "| repo: | 'my repo' |" >> $GITHUB_STEP_SUMMARY
+          echo "| branch name: | 'my branch' |" >> $GITHUB_STEP_SUMMARY
+          echo "| python: | 3.12 |" >> $GITHUB_STEP_SUMMARY
+          echo "| whl status: | ${WHL_EMOJI} |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "">> $GITHUB_STEP_SUMMARY
+
+
+          echo "| sccache summary | |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          if command -v sccache &>/dev/null; then
+            sccache --show-stats 2>&1 | sed -E 's/(.*)(  )+(.*)/|\1|\3|/g' | tee -a $GITHUB_STEP_SUMMARY
+          fi
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "">> $GITHUB_STEP_SUMMARY
+        shell: bash
