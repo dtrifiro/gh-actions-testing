@@ -28,7 +28,6 @@ jobs:
           echo "| branch name: | 'my branch' |" >> $GITHUB_STEP_SUMMARY
           echo "| python: | 3.12 |" >> $GITHUB_STEP_SUMMARY
           echo "| whl status: | ${WHL_EMOJI} |" >> $GITHUB_STEP_SUMMARY
-          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
           echo "">> $GITHUB_STEP_SUMMARY
 
 
