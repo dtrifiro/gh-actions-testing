@@ -32,11 +32,11 @@ jobs:
           echo "">> $GITHUB_STEP_SUMMARY
 
 
-          echo "| sccache summary | |" >> $GITHUB_STEP_SUMMARY
-          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
           if command -v sccache &>/dev/null; then
+            echo "| sccache summary | |" >> $GITHUB_STEP_SUMMARY
+            echo "|---|---|" >> $GITHUB_STEP_SUMMARY
             sccache --show-stats 2>&1 | sed -E 's/(.*)(  )+(.*)/|\1|\3|/g' | tee -a $GITHUB_STEP_SUMMARY
+            # echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+            echo "">> $GITHUB_STEP_SUMMARY
           fi
-          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
-          echo "">> $GITHUB_STEP_SUMMARY
         shell: bash
