@@ -1,5 +1,5 @@
 name: release test
-run-name: ${{ github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags')) && 'Publish to PyPI' || '(dry run) Publish to PyPI' }}
+run-name: ${{ (github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags'))) && 'Publish to PyPI' || '(dry run) Publish to PyPI' }}
 
 on:
   push:
@@ -32,7 +32,7 @@ jobs:
 
       - name: echo run name
         run: |
-          echo name=${{ (github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags'))) && 'Release' || '\(dry run\) Release' }}
+          echo "::info::name=${{ (github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags'))) && 'Release' || '\(dry run\) Release' }}"
 
       - name: check if release
         id: is-release
