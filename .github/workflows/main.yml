@@ -1,57 +1,41 @@
-name: python windows test
+name: release test
+run-name: ${{ github.event_name == 'release' && 'Release' || '(dry run) Release' }}
 
 on:
   push:
   workflow_dispatch:
+  release:
+    types:
+      - published
 
 jobs:
   build:
     runs-on: ${{matrix.os}}
     strategy:
       matrix:
-        pyv: ["3.9", "3.10", "3.13"]
-        os: ["macos-latest", "ubuntu-latest", "windows-latest"]
+        pyv: [
+            # "3.9",
+            # "3.10",
+            "3.13",
+          ]
+        os: [
+            # "macos-latest",
+            "ubuntu-latest",
+            # "windows-latest"
+          ]
 
     steps:
-      - name: setup-python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{matrix.pyv}}
-      - name: print
+      - name: debug
         run: |
-          import sys
+          echo "::info::event_name=${{github.event_name}}"
+          echo "::info::ref=${{github.ref}}"
 
-          print(f"{sys.version_info=}")
+      - name: non-release step
+        if: github.event_name != 'release'
+        run: |
+          echo "::warning::non-release"
 
-          try:
-            import _curses
-            print("_curses found")
-          except:
-            print("_curses not found")
-          try:
-              import curses
-              print("curses found")
-          except:
-            print("curses not found")
-          try:
-            import _readline
-            print("_readline found")
-          except:
-            print("_readline not found")
-          try:
-              import readline
-              print("readline found")
-          except:
-            print("readline not found")
-
-
-
-          print(
-            [
-              module for module in sys.modules
-              if any(
-                name in str(module) for name in ("readline", "curses")
-              )
-            ]
-          )
-        shell: python
+      - name: release step
+        if: github.event_name == 'release'
+        run: |
+          echo "::info::release"
