@@ -1,5 +1,5 @@
 name: release test
-run-name: ${{ github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags')) && 'Publish to PyPI' || '\(dry run\) Publish to PyPI' }}
+run-name: ${{ github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags')) && 'Publish to PyPI' || '(dry run) Publish to PyPI' }}
 
 on:
   push:
@@ -29,16 +29,27 @@ jobs:
         run: |
           echo "::info::event_name=${{github.event_name}}"
           echo "::info::ref=${{github.ref}}"
+
       - name: echo run name
         run: |
-          echo ${{ github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags')) && 'Release' || '\(dry run\) Release' }}
+          echo name=${{ (github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags'))) && 'Release' || '\(dry run\) Release' }}
+
+      - name: check if release
+        id: is-release
+        run: |
+          status=${{(github.event_name == 'release') || (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags'))}}
+          echo "value=$status" | tee -a "${GITHUB_OUTPUT}"
+
+      - name: step check
+        run: |
+          echo "::info::steps.is-releases.outputs.value=${{steps.is-release.outputs.value}}"
 
       - name: non-release step
-        if: ! (github.event_name == 'release'|| (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags')))
+        if: ${{steps.is-release.outputs.value == 'false'}}
         run: |
           echo "::warning::non-release"
 
       - name: release step
-        if: (github.event_name == 'release'|| (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags')))
+        if: ${{steps.is-release.outputs.value == 'true'}}
         run: |
           echo "::info::release"
