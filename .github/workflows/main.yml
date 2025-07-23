@@ -1,5 +1,4 @@
-name: release test
-run-name: ${{ (github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags'))) && 'Publish to PyPI' || '(dry run) Publish to PyPI' }}
+name: summary
 
 on:
   push:
@@ -25,31 +24,43 @@ jobs:
           ]
 
     steps:
-      - name: debug
+      - name: print headers
         run: |
-          echo "::info::event_name=${{github.event_name}}"
-          echo "::info::ref=${{github.ref}}"
+          (
+            echo # This is the header
 
-      - name: echo run name
-        run: |
-          echo "::info::name=${{ (github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags'))) && 'Release' || '\(dry run\) Release' }}"
+            echo this is just a description
+          ) |tee -a $GITHUB_STEP_SUMMARY
 
-      - name: check if release
-        id: is-release
+      - name: collapsible details
         run: |
-          status=${{(github.event_name == 'release') || (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags'))}}
-          echo "value=$status" | tee -a "${GITHUB_OUTPUT}"
+          (
+            cat <<EOF
+              <details>
 
-      - name: step check
-        run: |
-          echo "::info::steps.is-releases.outputs.value=${{steps.is-release.outputs.value}}"
+              <summary> this is collapsible stuff </summary>
 
-      - name: non-release step
-        if: ${{steps.is-release.outputs.value == 'false'}}
-        run: |
-          echo "::warning::non-release"
 
-      - name: release step
-        if: ${{steps.is-release.outputs.value == 'true'}}
+              <img src="https://public.decapod.one/cat/jpg">
+
+              <details>
+
+          EOF
+          ) | tee -a $GITHUB_STEP_SUMMARY
+
+      - name: print end
         run: |
-          echo "::info::release"
+          (
+            echo this is more text
+
+            cat <<EOF
+
+            \`\`\`python
+
+            def hello():
+              print("hello world")
+            \`\`\`
+
+          EOF
+            echo done
+          ) | tee -a $GITHUB_STEP_SUMMARY
