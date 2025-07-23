@@ -35,15 +35,18 @@ jobs:
       - name: collapsible details
         run: |
           (
+            ## This is the collapsible content section
+
             cat <<EOF
-              <details>
 
-              <summary> this is collapsible stuff </summary>
+            <details>
+
+            <summary> this is collapsible stuff </summary>
 
 
-              <img src="https://public.decapod.one/cat/jpg">
+            <img src="https://public.decapod.one/cat/jpg">
 
-              <details>
+            <details>
 
           EOF
           ) | tee -a $GITHUB_STEP_SUMMARY
