@@ -56,13 +56,14 @@ jobs:
           (
             echo this is more text
 
-            cat <<EOF
 
-            \`\`\`python
+            cat <<'EOF' # note that the quotes around 'EOF' are required to avoid command expansion
+
+            ```python
 
             def hello():
               print("hello world")
-            \`\`\`
+            ```
 
           EOF
             echo done
