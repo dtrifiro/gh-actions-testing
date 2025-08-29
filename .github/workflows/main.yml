@@ -24,47 +24,6 @@ jobs:
           ]
 
     steps:
-      - name: print headers
-        run: |
-          (
-            echo # This is the header
-
-            echo this is just a description
-          ) |tee -a $GITHUB_STEP_SUMMARY
-
-      - name: collapsible details
-        run: |
-          (
-            ## This is the collapsible content section
-
-            cat <<EOF
-
-            <details>
-
-            <summary> this is collapsible stuff </summary>
-
-
-            <img src="https://public.decapod.one/cat.jpg">
-
-            <details>
-
-          EOF
-          ) | tee -a $GITHUB_STEP_SUMMARY
-
-      - name: print end
-        run: |
-          (
-            echo this is more text
-
-
-            cat <<'EOF' # note that the quotes around 'EOF' are required to avoid command expansion
-
-            ```python
-
-            def hello():
-              print("hello world")
-            ```
-
-          EOF
-            echo done
-          ) | tee -a $GITHUB_STEP_SUMMARY
+      - uses: actions/checkout@v4
+        with:
+          repository: deepseek-ai/DeepGEMM
