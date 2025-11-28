@@ -1,34 +1,16 @@
-name: summary
+name: xdg runtime
 
 on:
   push:
-  release:
-    types:
-      - published
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ${{matrix.os}}
-    strategy:
-      matrix:
-        pyv: [
-            # "3.9",
-            # "3.10",
-            "3.13",
-          ]
-        os: [
-            # "macos-latest",
-            "ubuntu-latest",
-            # "windows-latest"
-          ]
-
+  testing:
+    runs-on: ubuntu-latest
     steps:
-      - name: "setup skopeo"
+      - uses: actions/checkout@v4
+      - name: xdg runtime dir
         run: |
-          sudo apt install -y skopeo
-
-      - name: "inspect"
-        run: |
-          repo=quay.io/vllm/automation-vllm:0.10.1.1.1_rocm634
-          skopeo inspect --no-tags docker://$repo || echo "Repository cannot be found or user is not authorized: $repo"
+          echo $XDG_RUNTIME_DIR
+          ls -l /run/user/$(id -u)
+          ls -l /run/user
