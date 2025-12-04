@@ -1,4 +1,4 @@
-name: xdg runtime
+name: jq
 
 on:
   push:
@@ -9,8 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: xdg runtime dir
+      - name: "check jq"
         run: |
-          echo $XDG_RUNTIME_DIR
-          ls -l /run/user/$(id -u)
-          ls -l /run/user
+          command -v jq
