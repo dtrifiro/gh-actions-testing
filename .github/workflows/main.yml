@@ -22,16 +22,18 @@ jobs:
     strategy:
       matrix:
         config: ${{ fromJson(needs.setup_matrix.outputs.config) }}
-    name: ${{ matrix.config.label}} ${{ matrix.config.timeout }} list=${{matrix.config.list}}
+        model: ${{ fromJson(needs.setup_matrix.outputs.config).models }}
+
+    name: ${{ matrix.config.label}} ${{ matrix.config.timeout }} list=${{matrix.config.model}}
 
     runs-on: ubuntu-latest
     steps:
       - name: 'run matrix element'
         run: |
           echo label=$LABEL
-          echo list="$LIST"
+          echo model="$MODEL"
           echo TIMEOUT=$TIMEOUT
         env:
           LABEL: ${{matrix.config.label}}
-          LIST: '${{matrix.config.list}}'
+          MODEL: '${{matrix.config.model}}'
           TIMEOUT: ${{matrix.config.timeout}}
