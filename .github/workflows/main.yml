@@ -5,10 +5,33 @@ on:
   workflow_dispatch:
 
 jobs:
-  testing:
+  setup_matrix:
+    outputs:
+      config: ${{ steps.setup.outputs.config }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: "check run id"
+      - name: setup matrix
+        id: setup
         run: |
-          echo $GITHUB_RUN_ID
+          python read_matrix.py | tee -a $GITHUB_OUTPUT
+        shell: bash
+
+  testing:
+    needs: [setup_matrix]
+    strategy:
+      matrix:
+        config: ${{ fromJson(needs.setup_matrix.outputs.config) }}
+    name: ${{ matrix.config.label}} ${{ matrix.config.timeout }} list=${{matrix.config.list}}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'run matrix element'
+        run: |
+          echo label=$LABEL
+          echo list="$LIST"
+          echo TIMEOUT=$TIMEOUT
+        env:
+          LABEL: ${{matrix.config.label}}
+          LIST: '${{matrix.config.list}}'
+          TIMEOUT: ${{matrix.config.timeout}}
