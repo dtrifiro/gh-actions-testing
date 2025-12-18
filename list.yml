@@ -1,0 +1,6 @@
+- label: antani
+  list:
+    - a
+    - b
+    - c
+  timeout: 300
