@@ -3,7 +3,7 @@ name: gh run id
 on:
   push:
     tags:
-      - "v*\+test*"
+      - "v*\\+test*"
   workflow_dispatch:
 
 jobs:
