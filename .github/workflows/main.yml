@@ -2,38 +2,15 @@ name: gh run id
 
 on:
   push:
+    tags:
+      - "v*\+test*"
   workflow_dispatch:
 
 jobs:
-  setup_matrix:
-    outputs:
-      config: ${{ steps.setup.outputs.config }}
+  testing:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: setup matrix
-        id: setup
+      - name: "check run id"
         run: |
-          python read_matrix.py | tee -a $GITHUB_OUTPUT
-        shell: bash
-
-  testing:
-    needs: [setup_matrix]
-    strategy:
-      matrix:
-        model: ${{ fromJson(needs.setup_matrix.outputs.config).config.models }}
-
-    # name: ${{ matrix.config.label}} ${{ matrix.config.timeout }} list=${{matrix.config.model}}
-
-    runs-on: ubuntu-latest
-    steps:
-      - name: 'run matrix element'
-        run: |
-          # echo label=$LABEL
-          echo model="$MODEL"
-          # echo TIMEOUT=$TIMEOUT
-        env:
-          # LABEL: ${{matrix.config.label}}
-          MODEL: '${{matrix.model}}'
-          # MODEL: '${{matrix.config.model}}'
-          # TIMEOUT: ${{matrix.config.timeout}}
+          echo $GITHUB_RUN_ID
