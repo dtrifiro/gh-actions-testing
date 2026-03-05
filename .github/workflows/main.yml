@@ -4,13 +4,36 @@ on:
   push:
     tags:
       - "v*\\+test*"
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
   testing:
+    strategy:
+      matrix:
+        config: ['config']
+
+    name: Testing ${{ matrix.config}}
+
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: "check run id"
+      - name: 'run matrix element'
         run: |
-          echo $GITHUB_RUN_ID
+          echo <<EOF >> $GITHUB_STEP_SUMMARY
+
+          "## Summary"
+
+          ```python
+          def hello_world():
+              print("hello world")
+          ```
+
+          This looks `good`, config is `${matrix.config}`
+          EOF
+        env:
+          # LABEL: ${{matrix.config.label}}
+          # MODEL: '${{matrix.model}}'
+          # MODEL: '${{matrix.config.model}}'
+          # TIMEOUT: ${{matrix.config.timeout}}
+          CONFIG: '${{matrix.config}}'
