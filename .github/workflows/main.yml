@@ -10,37 +10,9 @@ on:
 
 jobs:
   testing:
-    strategy:
-      matrix:
-        config: ['config']
-
-    name: Testing ${{ matrix.config}}
-
+    name: Testing notices
     runs-on: ubuntu-latest
     steps:
-      - name: 'run matrix element'
+      - name: "print notice"
         run: |
-          import os
-          from textwrap import dedent
-
-          summary = """
-              ## Summary
-
-              ```python
-              def hello_world():
-                  print("hello world")
-              ```
-
-              This is `code`, config={config}
-              """.format(config=os.getenv("CONFIG", "unset"))
-
-          with open(os.getenv("GITHUB_STEP_SUMMARY"), "a") as fh:
-            fh.write(dedent(summary))
-
-        env:
-          # LABEL: ${{matrix.config.label}}
-          # MODEL: '${{matrix.model}}'
-          # MODEL: '${{matrix.config.model}}'
-          # TIMEOUT: ${{matrix.config.timeout}}
-          CONFIG: '${{matrix.config}}'
-        shell: python
+          echo "::notice::This is a notice"
