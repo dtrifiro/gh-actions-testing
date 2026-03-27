@@ -1,4 +1,4 @@
-name: gh run id
+name: test
 
 on:
   push:
@@ -10,9 +10,12 @@ on:
 
 jobs:
   testing:
-    name: Testing notices
+    name: Testing gh messages
     runs-on: ubuntu-latest
     steps:
-      - name: "print notice"
+      - name: "test gh messages"
         run: |
-          echo "::notice::This is a notice"
+          echo "::notice title=Notice Title::This is a notice"
+          echo "::info title=Info title::This is info"
+          echo "::warning title=Warning Title::This is a warning"
+          echo "::error title=Error title::This is an error"
