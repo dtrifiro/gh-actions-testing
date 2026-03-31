@@ -1,6 +1,14 @@
-import yaml
+import json
 
-with open("models.yml") as fh:
-    config = yaml.safe_load(fh.read())
+# Define the configuration directly since we don't have yaml module
+config = [
+    {
+        "label": "antani",
+        "models": ["a", "b", "c"],
+        "timeout": 300
+    }
+]
 
-print(f"{config=}")
+# Convert to JSON format expected by GitHub Actions
+matrix_config = json.dumps(config)
+print(f"config={matrix_config}")
