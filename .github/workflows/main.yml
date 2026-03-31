@@ -33,9 +33,9 @@ jobs:
       - name: "run matrix element"
         run: |
           echo label=$LABEL
-          echo list="$LIST"
+          echo models="$MODELS"
           echo TIMEOUT=$TIMEOUT
         env:
           LABEL: ${{matrix.config.label}}
-          LIST: "${{matrix.config.list}}"
+          MODELS: ${{matrix.config.models}}
           TIMEOUT: ${{matrix.config.timeout}}
