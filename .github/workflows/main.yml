@@ -39,3 +39,7 @@ jobs:
           LABEL: ${{matrix.config.label}}
           MODELS: ${{join(matrix.config.models, ' ')}}
           TIMEOUT: ${{matrix.config.timeout}}
+
+      - uses: ./.github/actions/example/
+        with:
+          models_list: ${{matrix.config.models}}

@@ -1,0 +1,14 @@
+name: example
+description: "example"
+inputs:
+  models_list:
+    description: "List of models to be tested"
+    required: true
+runs:
+  using: composite
+  steps:
+    - run: |
+        echo "models=$MODELS"
+      shell: bash
+      env:
+        MODELS: ${{join(inputs.models, ',')}}
