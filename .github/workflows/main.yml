@@ -11,16 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
+      
       - name: Check gh CLI availability
         run: |
           echo "Checking gh CLI..."
           which gh
           gh --version
-
+      
       - name: Test creating an issue
         run: |
           gh issue create --title "Test issue from GitHub Actions" --body "Testing gh CLI permissions"
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       - name: Test listing files changed
         run: |
