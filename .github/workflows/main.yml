@@ -1,45 +1,28 @@
-name: test
+name: test-gh-cli
 
 on:
   push:
-    tags:
-      - "v*\\+test*"
     branches:
       - main
   workflow_dispatch:
 
 jobs:
-  setup_matrix:
-    outputs:
-      config: ${{ steps.setup.outputs.config }}
+  test-gh-cli:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: setup matrix
-        id: setup
+
+      - name: Check gh CLI availability
         run: |
-          python read_matrix.py | tee -a $GITHUB_OUTPUT
-        shell: bash
+          echo "Checking gh CLI..."
+          which gh
+          gh --version
 
-  testing:
-    needs: [setup_matrix]
-    strategy:
-      matrix:
-        config: ${{ fromJson(needs.setup_matrix.outputs.config) }}
-    name: ${{ matrix.config.label}} ${{ matrix.config.timeout }} models=${{join(matrix.config.models, ',')}}
-
-    runs-on: ubuntu-latest
-    steps:
-      - name: "run matrix element"
+      - name: Test creating an issue
         run: |
-          echo label=$LABEL
-          echo models="$MODELS"
-          echo TIMEOUT=$TIMEOUT
-        env:
-          LABEL: ${{matrix.config.label}}
-          MODELS: ${{join(matrix.config.models, ' ')}}
-          TIMEOUT: ${{matrix.config.timeout}}
+          gh issue create --title "Test issue from GitHub Actions" --body "Testing gh CLI permissions"
 
-      - uses: ./.github/actions/example/
-        with:
-          models_list: ${{matrix.config.models}}
+      - name: Test listing files changed
+        run: |
+          echo "Listing files changed in recent commits"
+          git diff --name-only HEAD~1 HEAD || echo "No previous commit to compare"
